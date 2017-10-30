@@ -90,13 +90,10 @@ def main():
     printProgressBar(0, numberOfFiniteElements, prefix = 'Generating Load Curves:', suffix = 'Complete', length = 25)
 
     with open("Load.k","a") as KFile:
-        KFile.write("""$
-    $
-    $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-    $                               LOAD DEFINITIONS                               $
-    $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-    $
-    """)
+        KFile.write("$\n$\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n")
+        KFile.write("$                               LOAD DEFINITIONS                               $\n")
+        KFile.write("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n")
+        KFile.write("$\n")
         for i, HeatGenerationCurvesPerElement in enumerate(iterateOverFiniteElements(NumberOfBunches)):
             if max(HeatGenerationCurvesPerElement)>0:
                 writeLoadCurve(KFile, HeatGenerationCurvesPerElement, FiniteElementNumber=i+1, timeVector=timeVector)
