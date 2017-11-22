@@ -78,8 +78,8 @@ def iterateOverFiniteElements(NumberOfBunches):
     for heatFile in heatFiles:
         heatFile.close()
 
-def writeLoadCurves(KFileName,ElementType):
-    timeVector=generateTimeVector("time.txt",endtime)        
+def writeLoadCurves(KFileName,ElementType,endTime):
+    timeVector=generateTimeVector("time.txt",endTime)        
     NumberOfBunches=int(len(timeVector)/2-1)
     numberOfFiniteElements = getNumberOfFiniteElements()
     printedPercentage=0
@@ -90,14 +90,14 @@ def writeLoadCurves(KFileName,ElementType):
         for FiniteElementNumber, HeatGenerationCurve in enumerate(iterateOverFiniteElements(NumberOfBunches), start=1):
             if max(HeatGenerationCurve)>0:
                 writeLoadCurve(KFile, ElementType, HeatGenerationCurve, FiniteElementNumber, timeVector)
-            if (FiniteElementNumber)-(printedPercentage)*(numberOfFiniteElements/100)=0:
+            if (FiniteElementNumber)-(printedPercentage)*(numberOfFiniteElements/100)>=0:
                 printProgressBar(FiniteElementNumber, numberOfFiniteElements)
                 printedPercentage=printedPercentage+1
 
 def main():
-    endtime=1e-3
+    endTime=1e-3
     ElementType='SOLID'
-    writeLoadCurves("Load.k",ElementType)
+    writeLoadCurves("Load.k",ElementType,endTime)
     printDuration(int(time.clock()))
 
 if __name__ == '__main__':
