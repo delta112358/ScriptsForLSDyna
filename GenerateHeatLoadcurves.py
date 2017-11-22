@@ -96,7 +96,7 @@ def writeLoadCurves(KFileName,ElementType):
 
 def main():
     endtime=1e-3
-    ElementType='SHELL'
+    ElementType='SOLID'
     writeLoadCurves("Load.k",ElementType)
     printDuration(int(time.clock()))
 
