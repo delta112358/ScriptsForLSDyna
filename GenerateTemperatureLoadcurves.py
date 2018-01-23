@@ -23,7 +23,7 @@ def writeLoadCurves(loadFileName, pulseTimes, roomTemperature, endTime):
                 writeLoadCurve(loadFile, temperatureDifferenceCurve, roomTemperature, NodeNumber, timeVector)
 
 def writeLoadCurve(loadFile, temperatureDifferenceCurve, roomTemperature, NodeNumber, timeVector):
-    temperatureDifferenceCurve = [0] + [temperatureDifference for temperatureDifference in temperatureDifferenceCurve for _ in range(2)]
+    temperatureDifferenceCurve = [0] + [temperatureDifference for temperatureDifference in temperatureDifferenceCurve] + [temperatureDifferenceCurve[-1]]
     loadFile.write('*DEFINE_CURVE\n% 10.0f% 10.0f% 10.0f% 10.0f% 10.0f% 10.0f' % (NodeNumber,0,0,1,0,0))
     for timeIndex,time in enumerate(timeVector):
         try:
