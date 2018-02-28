@@ -66,5 +66,3 @@ def main():
     print('The Loadcurve for *LOAD_BODY_GENERALIZED was saved as Accel.k.')
 if __name__ == '__main__':
   main()
-
-

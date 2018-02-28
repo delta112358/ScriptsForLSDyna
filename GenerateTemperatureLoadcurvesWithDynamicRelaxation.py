@@ -33,7 +33,7 @@ def writeLoadCurves(loadFileName, relaxationTime, pulseTimes, roomTemperature, e
 
 def writeLoadCurve(loadFile, temperatureDifferenceCurve, roomTemperature, NodeNumber, timeVector):
     temperatureDifferenceCurve = [0] + [temperatureDifference for temperatureDifference in temperatureDifferenceCurve] + [temperatureDifferenceCurve[-1]]
-    loadFile.write('*DEFINE_CURVE\n% 10.0f% 10.0f% 10.0f% 10.0f% 10.0f% 10.0f' % (NodeNumber,0,2,1,0,0))
+    loadFile.write('*DEFINE_CURVE\n% 10.0f% 10.0f% 10.0f% 10.0f% 10.0f% 10.0f' % (NodeNumber,2,1,1,0,0))
     for timeIndex,time in enumerate(timeVector):
         try:
             cond1=temperatureDifferenceCurve[timeIndex-1]>0
