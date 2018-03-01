@@ -109,6 +109,8 @@ def main():
     ElementType='SOLID'
     maximumDepositedEnergy=writeLoadCurves("Load.k",ElementType,endTime)
     print("Maximum deposited Energy in Element "+ str(maximumDepositedEnergy[0]) +":\n" + str(maximumDepositedEnergy[1]/1000000) + " J/cm3.")
+    with open('EnergyDeposition.txt','w') as file:
+        file.write("Maximum deposited Energy in Element "+ str(maximumDepositedEnergy[0]) +":\n" + str(maximumDepositedEnergy[1]/1000000) + " J/cm3.")
     printDuration(int(time.clock()))
 
 if __name__ == '__main__':
