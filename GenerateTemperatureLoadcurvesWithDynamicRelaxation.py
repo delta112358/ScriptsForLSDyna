@@ -1,5 +1,5 @@
 def generateTimeVector(relaxationTime,pulseTimes,endTime):
-	timeVector=[0,relaxationTime]+[i+relaxationTime for i in pulseTimes]+[endTime]
+	timeVector=[0]+[i for i in pulseTimes]+[endTime]
 	return timeVector
 
 def getNumberOfNodes():
@@ -15,7 +15,7 @@ def iterateOverNodes(NumberOfTempFiles,roomTemperature):
     for tempFile in tempFiles:
         tempFile.close()
 
-def writeLoadCurves(loadFileName, relaxationTime, pulseTimes, roomTemperature, endTime):
+def writeLoadCurves(loadFileName, pulseTimes, roomTemperature, endTime):
     timeVector=generateTimeVector(relaxationTime,pulseTimes,endTime)        
     NumberOfTempFiles=int(len(pulseTimes)+1)
     with open(loadFileName,"w") as loadFile:
@@ -32,7 +32,7 @@ def writeLoadCurves(loadFileName, relaxationTime, pulseTimes, roomTemperature, e
                 writeLoadCurve(loadFile, temperatureDifferenceCurve, roomTemperature, NodeNumber, timeVector)
 
 def writeLoadCurve(loadFile, temperatureDifferenceCurve, roomTemperature, NodeNumber, timeVector):
-    temperatureDifferenceCurve = [0] + [temperatureDifference for temperatureDifference in temperatureDifferenceCurve] + [temperatureDifferenceCurve[-1]]
+    temperatureDifferenceCurve =[temperatureDifference for temperatureDifference in temperatureDifferenceCurve] + [temperatureDifferenceCurve[-1]]
     loadFile.write('*DEFINE_CURVE\n% 10.0f% 10.0f% 10.0f% 10.0f% 10.0f% 10.0f' % (NodeNumber,2,1,1,0,0))
     for timeIndex,time in enumerate(timeVector):
         try:
@@ -51,11 +51,10 @@ def main():
     # Temp2.txt contains the temperatures after the first beam impact
     # Temp3.txt after the second beam impact and so on
     roomTemperature = 22
-    relaxationTime = 1e-9
     pulseTimes = [2.1E-6]
     endTime = 5e-5
     loadFileName='Load.k'
-    writeLoadCurves(loadFileName, relaxationTime, pulseTimes, roomTemperature, endTime)
+    writeLoadCurves(loadFileName, pulseTimes, roomTemperature, endTime)
 
 if __name__ == '__main__':
     main()
