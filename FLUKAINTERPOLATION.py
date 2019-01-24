@@ -12,7 +12,6 @@ def main():
     printMaximumEnergyDeposition(maximumDepositedEnergy)
     printDuration(int(time.clock()))
 
-
 def generateLoadApplicationFile(fileAccessInfo,scaleFactor,thresholdFactor,zOffet,ElementType,partNumber):
     maximumDepositedEnergy=[0,0]
     fileList = [open(fileName,IOType) for (fileName,IOType) in fileAccessInfo]
@@ -28,7 +27,6 @@ def generateLoadApplicationFile(fileAccessInfo,scaleFactor,thresholdFactor,zOffe
         file.close()
     return maximumEnergyDepostion
 
-
 def generateTimeVector(coordinateFile,endtime):
     next(coordinateFile)
     times = (float(line.strip().split(',')[1]) for line in coordinateFile)
@@ -37,8 +35,6 @@ def generateTimeVector(coordinateFile,endtime):
     offsets = [0,rampTime]
     timeVector = [0,rampTime,firstEntry,firstEntry+rampTime]
     return timeVector + [time+offset for time in times for offset in offsets] + [endtime]
-
-
 
 def getDataFromFlukaFile(flukaFile,scaleFactor,thresholdFactor):
     headerRaw = (next(flukaFile).strip().split() for x in range(8))
@@ -65,7 +61,6 @@ def getDataFromFlukaFile(flukaFile,scaleFactor,thresholdFactor):
     flukaDataArray = scaleFactor * flukaDataArray
     return flukaCoordinateAxes, flukaDataArray, dimension
 
-
 def processHeaderData(headerRaw):
     tempHead=[]
     for line in headerRaw:
@@ -82,7 +77,6 @@ def processHeaderData(headerRaw):
         headerData[index][2]=int(line[2])
     return headerData
 
-
 def makeFlukaCoordinateAxes(headerData,dimension):
     flukaCoordinateAxes=[]
     for i in range(3):
@@ -93,13 +87,11 @@ def makeFlukaCoordinateAxes(headerData,dimension):
         filteredFlukaCoordinateAxes=(flukaCoordinateAxes[0], flukaCoordinateAxes[1], flukaCoordinateAxes[2])
     return filteredFlukaCoordinateAxes
 
-
 def getMeshInformationArray(KFile,partNumber,dimension):
     firstElementNumber,meshInformationArray = getElementCoordinates(KFile,partNumber)
     if dimension == '2D':
         meshInformationArray=meshInformationArray[:,:2]
     return firstElementNumber,meshInformationArray
-
 
 def getElementCoordinates(KFile,partNumber):
     locstr = str
@@ -134,7 +126,6 @@ def makeLineDict(KFile,chunkSize,start,end,variableType):
         dictionary[key]=[variableType(element) for element in value[start:end]]
     return dictionary
 
-
 def makeLineIterator(KFile,chunkSize,start,end,variableType):
     return (([variableType(entry) for entry in [element for element in chunks(line,chunkSize)][:-1]]) for line in giveLineOfBlock(KFile,['$','*']))
 
@@ -151,8 +142,6 @@ def giveLineOfBlock(file,signal):
             return
         yield line
 
-
-
 def getSweepCoordinates(coordinateFile,zOffet,dimension):
     next(coordinateFile)
     coordinates=(line.strip().split(',')[2:] for line in coordinateFile)
@@ -160,28 +149,6 @@ def getSweepCoordinates(coordinateFile,zOffet,dimension):
         return [np.array([float(value) for value in line]+[zOffet]) for line in coordinates]
     else:
         return [np.array([float(value) for value in line]) for line in coordinates]
-
-
-
-# def interpolateOnMeshAndWriteFile(outputKFile,flukaCoordinateAxes,flukaDataArray,firstElementNumber,meshInformationArray,timeVector,coordinates):
-#     maximumDepositedEnergy = [0,0]
-#     outputKFile.write('$\n$\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n')
-#     outputKFile.write('$                               LOAD DEFINITIONS                               $\n')
-#     outputKFile.write('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n$\n')
-
-#     interpolationFunction = RegularGridInterpolator(flukaCoordinateAxes, flukaDataArray, bounds_error=False, fill_value=None)
-
-#     previousElementNumber = firstElementNumber - 1
-#     for localFiniteElementNumber, heatGenerationCurve in enumerate(iterateOverFiniteElements(meshInformationArray, coordinates, interpolationFunction), start=1):
-#         finiteElementNumber = localFiniteElementNumber + previousElementNumber
-#         heatGenerationCurve = np.array(heatGenerationCurve)
-#         heatGenerationCurve[heatGenerationCurve < 0] = 0
-#         if np.amax(heatGenerationCurve) > 0:
-#             depositedEnergy = writeLoadCurve(outputKFile, [ElementType, heatGenerationCurve, finiteElementNumber, timeVector])
-#             if depositedEnergy > maximumDepositedEnergy[1]:
-#                 maximumDepositedEnergy = [finiteElementNumber,depositedEnergy]
-#     previousElementNumber = previousElementNumber + meshInformationArray.shape[0]
-#     return maximumDepositedEnergy
 
 def interpolateOnMeshAndWriteFile(outputKFile,flukaCoordinateAxes,flukaDataArray,firstElementNumber,meshInformationArray,timeVector,coordinates):
     maximumDepositedEnergy = [0,0]
@@ -205,8 +172,6 @@ def interpolateOnMeshAndWriteFile(outputKFile,flukaCoordinateAxes,flukaDataArray
                     maximumDepositedEnergy = [finiteElementNumber,depositedEnergy]
         previousElementNumber = previousElementNumber + array.shape[0]
     return maximumDepositedEnergy
-
-
 
 def iterateOverFiniteElements(meshInformationArray, coordinates, interpolationFunction):
     meshDataIterator = (np.nditer(interpolationFunction(np.subtract(meshInformationArray,coordinateSystem))) for coordinateSystem in coordinates)
