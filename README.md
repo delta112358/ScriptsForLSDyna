@@ -7,6 +7,13 @@ Generates an internal heat generation rate in W/m^3 of a body, for each finite e
 - The number of files defines the number of load steps to discetize a variable heat generation rate over time.
 - The end times of the load steps have to be stored in a time.txt file.
 
+## FLUKAINTERPOLATION.py
+Generates an internal heat generation rate in W/m^3 of a body, for each finite element over time (*LOAD_HEAT_GENERATION_%).
+- The load is defined by a sweep movement of discrete impact locations of a single bunch.
+- As input for the single bunch, a FLUKA output file is used (single bunch, kinetic energy per bin per proton in GeV/cm^3).
+- The sweep is described in a csv file with the impact locations as (impact time,x,y) coordinates.
+- All inputs to the script are defined in a Parameter.py file.
+
 ## GenerateTemperatureLoadcurves.py
 Generates a change of temperature in a body, defined node wise (*LOAD_THERMAL_VARIABLE).
 - The load has to be defined in text files (Temp1.txt, Temp2.txt, ...), where each file describes a new Temperature field.
